@@ -1,125 +1,149 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
+<!--
+CheckStyleの設定ファイル
+- 公式     : http://checkstyle.sourceforge.net/
+- 日本語訳 : https://sites.google.com/site/checkstyle5/standard-checks
+  バージョン5なので少し古い
+-->
+
+<!-- Checker以下に全ファイル共通の設定を書く -->
 <module name="Checker">
-    <property name="severity" value="warning"/>
+    <property name="severity" value="warning" />
 
+    <!-- TreeWalker以下はJavaソースファイルのみ -->
     <module name="TreeWalker">
-        <module name="FileContentsHolder"/>
-        <module name="SuppressWarningsHolder"/>
-        <module name="ConstantName"/>
-        <module name="LocalFinalVariableName"/>
-        <module name="LocalVariableName"/>
+        <!-- Block Checks -->
+        <module name="EmptyBlock">
+            <!-- コメントだけでもあればOK -->
+            <property name="option" value="text" />
+        </module>
+        <!-- 開始の中括弧は常に行末 -->
+        <module name="LeftCurly" />
+        <!-- 括弧の省略は不可 -->
+        <module name="NeedBraces" />
+        <!-- 終了の中括弧の制限 詳しくはドキュメント参照 -->
+        <module name="RightCurly" />
+        <!-- 余分なブロックチェック -->
+        <module name="AvoidNestedBlocks" />
+
+        <!-- Class Design -->
+        <!-- private コンストラクタしか持たないクラスがfinal宣言されているかをチェック -->
+        <module name="FinalClass" />
+        <!-- staticメソッドしか持たないクラスはpublicコンストラクタが無いようにすべきなので、そのチェック -->
+        <module name="HideUtilityClassConstructor" />
+        <!-- 例外クラスがfinalフィールドのみかチェック -->
+        <module name="MutableException" />
+        <!-- １つのメソッドにつきthrowsは1つだけ -->
+        <module name="ThrowsCount" />
+
+        <!-- Import -->
+        <!-- static import がないことをチェック -->
+        <module name="AvoidStaticImport" />
+        <!-- 不正なパッケージ群からのインポートをチェック -->
+        <module name="IllegalImport" />
+        <!-- 冗長なインポート文をチェック -->
+        <module name="RedundantImport" />
+        <!-- 使用されていないインポート文をチェック -->
+        <module name="UnusedImports" />
+        <!-- インポートの順序とグルーピングをチェック -->
+        <module name="ImportOrder" />
+
+        <!-- Metrics -->
+        <!-- １つの式内での &&, || と ^ の数を制限 (3つまで)-->
+        <module name="BooleanExpressionComplexity" />
+        <!-- クラス内から生成（new）するクラスの種類数をチェック(7つまで) -->
+        <module name="ClassDataAbstractionCoupling" />
+        <!-- あるクラス内から参照するクラスの種類数をチェック(20まで) -->
+        <module name="ClassFanOutComplexity" />
+        <!-- 循環的複雑度をチェック(10まで) -->
+        <module name="CyclomaticComplexity" />
+        <!-- 分岐の数が多いものをチェック(200まで) -->
+        <module name="NPathComplexity" />
+
+        <!-- Modifiers -->
+        <!-- 修飾子の順番チェック -->
+        <module name="ModifierOrder" />
+        <!-- インターフェースとアノテーションの冗長な修飾子をチェック -->
+        <module name="RedundantModifier" />
+
+        <!-- Naming Conventions ドキュメント参照 -->
+        <module name="ConstantName" />
+        <module name="LocalFinalVariableName" />
+        <module name="LocalVariableName" />
         <module name="MemberName">
-            <property name="format" value="^m[A-Z][a-zA-Z0-9]*$"/>
+            <!-- public と パッケージprivate以外はm〇〇 -->
+            <property name="format" value="^m[A-Z][a-zA-Z0-9]*$" />
             <property name="applyToPublic" value="false" />
             <property name="applyToPackage" value="false" />
         </module>
-        <module name="MethodName"/>
-        <module name="PackageName"/>
-        <module name="ParameterName"/>
+        <module name="MethodName" />
+        <module name="PackageName" />
+        <module name="ParameterName" />
         <module name="StaticVariableName">
-            <property name="format" value="^s[A-Z][a-zA-Z0-9]*$"/>
+            <property name="format" value="s[A-Z][a-zA-Z0-9]*$" />
         </module>
-        <module name="IllegalImport"/>
-        <module name="RedundantImport"/>
-        <module name="UnusedImports"/>
-        <module name="AnonInnerLength"/>
-        <module name="ExecutableStatementCount">
-            <property name="tokens" value="INSTANCE_INIT,STATIC_INIT,METHOD_DEF,CTOR_DEF"/>
+        <module name="TypeName" />
+
+        <!-- Size Violations -->
+        <!-- 長い匿名インナークラスをチェック -->
+        <module name="AnonInnerLength">
+            <property name="max" value="100" />
         </module>
+        <!-- 実行可能ステートメントチェック（30） -->
+        <module name="ExecutableStatementCount" />
+        <!-- 行の長さ -->
         <module name="LineLength">
-            <property name="max" value="100"/>
+            <property name="max" value="100" />
         </module>
-        <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
-        <module name="OuterTypeNumber"/>
-        <module name="MethodCount"/>
-        <module name="GenericWhitespace"/>
-        <module name="EmptyForInitializerPad"/>
-        <module name="EmptyForIteratorPad"/>
-        <module name="NoWhitespaceAfter"/>
-        <module name="NoWhitespaceBefore"/>
-        <module name="OperatorWrap"/>
-        <module name="MethodParamPad"/>
-        <module name="ParenPad"/>
-        <module name="TypecastParenPad">
-            <property name="tokens" value="RPAREN,TYPECAST"/>
+        <!-- パラメータ数 -->
+        <module name="ParameterNumber">
+            <property name="max" value="4" />
         </module>
-        <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround">
-            <property name="tokens" value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,DO_WHILE,EQUAL,GE,GT,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,RCURLY,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,TYPE_EXTENSION_AND,WILDCARD_TYPE"/>
-        </module>
-        <module name="ModifierOrder"/>
-        <module name="RedundantModifier"/>
-        <module name="AvoidNestedBlocks"/>
-        <module name="EmptyBlock"/>
-        <module name="LeftCurly"/>
-        <module name="NeedBraces"/>
-        <module name="RightCurly"/>
-        <module name="AvoidInlineConditionals"/>
-        <module name="CovariantEquals"/>
-        <module name="DefaultComesLast"/>
-        <module name="DeclarationOrder"/>
-        <module name="EmptyStatement"/>
-        <module name="EqualsAvoidNull"/>
-        <module name="EqualsHashCode"/>
-        <module name="ExplicitInitialization"/>
-        <module name="FallThrough"/>
-        <module name="FinalLocalVariable"/>
-        <module name="HiddenField"/>
-        <module name="IllegalInstantiation"/>
-        <module name="IllegalCatch"/>
-        <module name="IllegalThrows"/>
+        <!-- １ファイルにつき、１クラスを定義しているか -->
+        <module name="OuterTypeNumber" />
+
+        <!-- Whitespace -->
+        <module name="GenericWhitespace" />
+        <module name="NoWhitespaceAfter" />
+        <module name="NoWhitespaceBefore" />
+        <module name="MethodParamPad" />
+        <module name="ParenPad" />
+        <module name="TypecastParenPad" />
+        <module name="WhitespaceAfter" />
+        <module name="WhitespaceAround" />
+
+        <!-- Coding -->
+        <module name="EmptyStatement" />
+        <module name="EqualsHashCode" />
+        <module name="FinalLocalVariable" />
+        <module name="HiddenField" />
+        <module name="IllegalInstantiation" />
         <module name="IllegalToken">
-            <property name="tokens" value="LITERAL_SWITCH"/>
+            <property name="tokens" value="LITERAL_SWITCH" />
         </module>
-        <module name="IllegalTokenText"/>
-        <module name="IllegalType">
-            <property name="tokens" value="METHOD_DEF,PARAMETER_DEF,VARIABLE_DEF"/>
+        <module name="IllegalTokenText" />
+        <module name="InnerAssignment" />
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1,0,1" />
         </module>
-        <module name="InnerAssignment"/>
-        <module name="JUnitTestCase"/>
-        <module name="MagicNumber"/>
-        <module name="MissingSwitchDefault"/>
-        <module name="ModifiedControlVariable"/>
-        <module name="MultipleStringLiterals"/>
-        <module name="MultipleVariableDeclarations"/>
-        <module name="NestedForDepth"/>
-        <module name="NestedIfDepth"/>
-        <module name="NestedTryDepth"/>
-        <module name="NoClone"/>
-        <module name="NoFinalizer"/>
-        <module name="PackageDeclaration"/>
-        <module name="ParameterAssignment"/>
-        <module name="SimplifyBooleanExpression">
-            <property name="severity" value="info"/>
-        </module>
-        <module name="SimplifyBooleanReturn">
-            <property name="severity" value="info"/>
-        </module>
+        <module name="ModifiedControlVariable" />
+        <module name="SimplifyBooleanExpression" />
+        <module name="StringLiteralEquality" />
+        <module name="NestedIfDepth" />
+        <module name="NestedTryDepth" />
+        <module name="IllegalCatch" />
+        <module name="IllegalThrows" />
+        <module name="PackageDeclaration" />
+        <module name="DeclarationOrder" />
+        <module name="ParameterAssignment" />
+        <module name="ExplicitInitialization" />
+        <module name="MultipleStringLiterals" />
+        <module name="MultipleVariableDeclarations" />
+        <module name="UnnecessaryParentheses" />
 
     </module>
 
-    <module name="FileLength">
-        <property name="max" value="1000"/>
-    </module>
-
-    <module name="FileTabCharacter"/>
-
-    <module name="NewlineAtEndOfFile"/>
-
-    <module name="Translation"/>
-
-    <module name="UniqueProperties"/>
-
-    <module name="SeverityMatchFilter"/>
-
-    <module name="SuppressionFilter"/>
-
-    <module name="SuppressionCommentFilter"/>
-
-    <module name="SuppressWithNearbyCommentFilter"/>
-
-    <module name="SuppressWarningsFilter"/>
 </module>
