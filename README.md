@@ -1,4 +1,5 @@
 # Documents
 ドキュメント集（メモ代わりのようなもの）
 
-* [wiki](https://github.com/eno314/Documents/wiki)
+## reading
+読んだ技術書の感想や要約の置き場所
